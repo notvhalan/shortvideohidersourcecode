@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Blocker Settings</title>
+    <style>
+        :root {
+            /* Light Mode Variables (Default) */
+            --bg-color: #f0f0f0;
+            --text-color: #000000;
+            --container-bg-color: #ffffff;
+            --group-title-color: #6d6d72;
+            --separator-color: #c8c7cc;
+            --toggle-bg-off: #e9e9eb;
+            --toggle-bg-on: #34c759;
+            --toggle-knob-bg: #ffffff;
+            --toggle-knob-shadow: 0px 3px 8px rgba(0,0,0,0.15), 0px 1px 1px rgba(0,0,0,0.10);
+            --status-success-color: #34c759;
+            --status-error-color: #ff3b30;
+            --footer-note-color: #6d6d72;
+            --disabled-opacity: 0.5;
+            --unlock-message-color: #8a8a8e;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #000000;
+                --text-color: #ffffff;
+                --container-bg-color: #1c1c1e;
+                --group-title-color: #8e8e93;
+                --separator-color: #38383a;
+                --toggle-bg-off: #39393d;
+                --toggle-bg-on: #30d158;
+                --toggle-knob-shadow: 0px 3px 8px rgba(0,0,0,0.3), 0px 1px 1px rgba(0,0,0,0.2);
+                --status-success-color: #32d74b;
+                --status-error-color: #ff453a;
+                --footer-note-color: #8e8e93;
+                --unlock-message-color: #636366;
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            padding: 15px; margin: 0; min-width: 320px; max-width: 100%;
+            box-sizing: border-box; background-color: var(--bg-color); color: var(--text-color);
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .container {
+            background-color: var(--container-bg-color); border-radius: 10px;
+            margin-bottom: 20px; transition: background-color 0.3s ease;
+        }
+        .setting-group-title {
+            font-size: 0.9em; font-weight: normal; color: var(--group-title-color);
+            text-transform: uppercase; padding: 15px 15px 5px 15px; margin: 0;
+            transition: color 0.3s ease;
+        }
+        .setting {
+            padding: 12px 15px; display: flex; align-items: center;
+            justify-content: space-between; border-bottom: 1px solid var(--separator-color);
+            min-height: 44px; box-sizing: border-box;
+            transition: border-color 0.3s ease, opacity 0.3s ease;
+        }
+        .setting:last-child { border-bottom: none; }
+        .setting > div:first-child { flex-grow: 1; margin-right: 10px; }
+        .setting > div:first-child > label[for] {
+            font-size: 1em; color: var(--text-color);
+            transition: color 0.3s ease; display: block;
+        }
+        .setting .unlock-message {
+            font-size: 0.8em; color: var(--unlock-message-color);
+            display: block; margin-top: 4px;
+        }
+        .switch {
+            position: relative; display: inline-block;
+            width: 51px; height: 31px; flex-shrink: 0;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--toggle-bg-off);
+            transition: background-color 0.3s ease; border-radius: 31px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 27px; width: 27px;
+            left: 2px; bottom: 2px; background-color: var(--toggle-knob-bg);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+            border-radius: 50%; box-shadow: var(--toggle-knob-shadow);
+        }
+        .switch input:checked + .slider { background-color: var(--toggle-bg-on); }
+        .switch input:checked + .slider:before { transform: translateX(20px); }
+        .setting.iap-locked { opacity: var(--disabled-opacity); }
+        .setting.iap-locked .switch { cursor: not-allowed; }
+        .status {
+            padding: 10px; text-align: center; font-size: 0.9em;
+            transition: opacity 0.3s ease, color 0.3s ease; /* Added color transition */
+            display: none; opacity: 0;
+        }
+        .status-success { color: var(--status-success-color); opacity: 1; }
+        .status-error { color: var(--status-error-color); opacity: 1; }
+        .footer-note {
+            text-align: center; font-size: 0.8em; color: var(--footer-note-color);
+            padding: 10px 15px; transition: color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="setting-group-title">YouTube Settings</h2>
+        <div class="setting">
+            <div><label for="redirectShorts">Redirect Shorts to Watch Page</label></div>
+            <label class="switch">
+                <input type="checkbox" id="redirectShorts">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="setting">
+            <div><label for="removeShortsUI">Remove General Shorts UI</label></div>
+            <label class="switch">
+                <input type="checkbox" id="removeShortsUI">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="setting">
+            <div><label for="removeAdditionalShortsShelvesToggle">Remove Shorts Shelves (Search/Home)</label></div>
+            <label class="switch">
+                <input type="checkbox" id="removeAdditionalShortsShelvesToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="setting">
+            <div><label for="grayscaleThumbnails">Grayscale Video Thumbnails</label></div>
+            <label class="switch">
+                <input type="checkbox" id="grayscaleThumbnails">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="setting">
+            <div><label for="modifyTitles">Simplify Video Titles</label></div>
+            <label class="switch">
+                <input type="checkbox" id="modifyTitles">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="setting" id="removeLogoSettingContainer">
+            <div>
+                <label for="removeYouTubeLogo">Hide YouTube Logo ✨</label>
+                <small class="unlock-message" id="removeLogoUnlockMessage" style="display:none;">Unlock this perk in the Tip Jar!</small>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="removeYouTubeLogo">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="setting-group-title">Instagram Settings</h2>
+        <div class="setting" id="redirectInstagramReelsSettingContainer">
+             <div><label for="redirectInstagramReels">Redirect Reels to Main Feed</label></div>
+            <label class="switch">
+                <input type="checkbox" id="redirectInstagramReels">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="setting" id="removeInstagramReelsUISettingContainer">
+            <div><label for="removeInstagramReelsUI">Remove Reels UI Elements</label></div>
+            <label class="switch">
+                <input type="checkbox" id="removeInstagramReelsUI">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div id="statusMessage" class="status"></div>
+    <p class="footer-note">Changes will apply on new pages or after a refresh of existing ones.</p>
+
+    <script src="settings.js"></script>
+</body>
+</html>
